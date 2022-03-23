@@ -16,5 +16,4 @@ public class ProductService {
     public void setPromotionsService(PromotionsService promotionsService) {
         this.promotionsService = promotionsService;
     }
-
 }

@@ -50,7 +50,6 @@ public class BeanFactory {
 
                 }
 
-
             }
         } catch (IOException | URISyntaxException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
