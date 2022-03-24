@@ -1,9 +1,9 @@
 package com.sander;
 
 import org.springframework.beans.factory.anotation.Autowired;
-import org.springframework.beans.factory.stereotype.Component;
+import org.springframework.beans.factory.stereotype.Service;
 
-@Component
+@Service
 public class ProductService {
 
     @Autowired
