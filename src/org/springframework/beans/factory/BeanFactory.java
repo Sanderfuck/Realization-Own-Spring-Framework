@@ -28,6 +28,10 @@ public class BeanFactory {
         postProcessors.add(postProcessor);
     }
 
+    public Map<String, Object> getSingletons() {
+        return singletons;
+    }
+
     public void instantiate(String basePackage) {
         try {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
@@ -105,7 +109,7 @@ public class BeanFactory {
         }
     }
 
-    public void initpostConstractMethod() {
+    public void initPostConstructMethod() {
         for (Object bean : singletons.values()) {
             for (Method method : bean.getClass().getMethods()) {
                 if (method.isAnnotationPresent(PostConstruct.class)) {

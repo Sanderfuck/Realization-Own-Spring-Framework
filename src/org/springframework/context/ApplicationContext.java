@@ -1,8 +1,12 @@
 package org.springframework.context;
 
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.event.ContextClosedEvent;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public class ApplicationContext {
     BeanFactory beanFactory = new BeanFactory();
@@ -16,7 +20,22 @@ public class ApplicationContext {
         beanFactory.initializeBeans();
     }
 
-    public void close() {
+    public void close() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         beanFactory.close();
+        for (Object bean : beanFactory.getSingletons().values()) {
+            if(bean instanceof ApplicationListener) {
+                for(Type type : bean.getClass().getGenericInterfaces()) {
+                    if(type instanceof ParameterizedType) {
+                        ParameterizedType parameterizedType = (ParameterizedType) type;
+
+                        Type firstParameter = parameterizedType.getActualTypeArguments()[0];
+                        if (firstParameter.equals(ContextClosedEvent.class)) {
+                            Method method = bean.getClass().getMethod("onApplicationEvent",ContextClosedEvent.class);
+                            method.invoke(bean, new ContextClosedEvent());
+                        }
+                    }
+                }
+            }
+        }
     }
 }
